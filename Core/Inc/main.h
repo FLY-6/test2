@@ -63,6 +63,8 @@ void Error_Handler(void);
 #define ST1VAFE6_SPI_CS_GPIO_Port GPIOA
 #define ST1VAFE6_INT2_Pin GPIO_PIN_1
 #define ST1VAFE6_INT2_GPIO_Port GPIOB
+#define DQ_Pin GPIO_PIN_9
+#define DQ_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 

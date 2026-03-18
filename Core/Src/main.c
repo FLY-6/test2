@@ -21,7 +21,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "DS18B20.h"
+#include "ST1VAFE.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -54,6 +55,11 @@ static void MX_GPIO_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_USART1_UART_Init(void);
 /* USER CODE BEGIN PFP */
+void DWT_Init(void) {
+    CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
+    DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
+    DWT->CYCCNT = 0;
+}
 
 /* USER CODE END PFP */
 
@@ -84,7 +90,7 @@ int main(void)
 
   /* Configure the system clock */
   SystemClock_Config();
-
+  DWT_Init();
   /* USER CODE BEGIN SysInit */
 
   /* USER CODE END SysInit */
@@ -102,7 +108,11 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+        DS18B20_StartConvert();            // 启动转换
+        HAL_Delay(750);                     // 等待转换完成（12位需750ms）
+        int16_t raw = DS18B20_ReadTemperature();
+        float temp = DS18B20_RawToCelsius(raw);
+        
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -248,6 +258,9 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(ST1VAFE6_SPI_CS_GPIO_Port, ST1VAFE6_SPI_CS_Pin, GPIO_PIN_RESET);
 
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(DQ_GPIO_Port, DQ_Pin, GPIO_PIN_RESET);
+
   /*Configure GPIO pins : PA1 ST1VAFE6_SPI_CS_Pin */
   GPIO_InitStruct.Pin = GPIO_PIN_1|ST1VAFE6_SPI_CS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -267,11 +280,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(ST1VAFE6_INT2_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PB9 */
-  GPIO_InitStruct.Pin = GPIO_PIN_9;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  /*Configure GPIO pin : DQ_Pin */
+  GPIO_InitStruct.Pin = DQ_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(DQ_GPIO_Port, &GPIO_InitStruct);
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 
