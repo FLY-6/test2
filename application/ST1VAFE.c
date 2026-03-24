@@ -1,4 +1,5 @@
 #include "ST1VAFE.h"
+#include "stm32f4xx_hal_gpio.h"
 int16_t hr;
 extern SPI_HandleTypeDef hspi1;
 uint8_t ST1VAFE6AX_ReadReg(uint8_t reg) {
@@ -8,7 +9,7 @@ uint8_t ST1VAFE6AX_ReadReg(uint8_t reg) {
     HAL_GPIO_WritePin(ST1VAFE6_SPI_CS_GPIO_Port, ST1VAFE6_SPI_CS_Pin, GPIO_PIN_RESET); // CS 拉低
     HAL_SPI_Transmit(&hspi1, &tx_cmd, 1, HAL_MAX_DELAY); // 发送命令
     HAL_SPI_Receive(&hspi1, &rx_data, 1, HAL_MAX_DELAY); // 接收数据
-    HAL_GPIO_WritePin(ST1VAFE6_SPI_CS_GPIO_Port, ST1VAFE6_SPI_CS_Pin, GPIO_PIN_SET);   // CS 拉高
+    HAL_GPIO_WritePin(ST1VAFE6_SPI_CS_GPIO_Port, ST1VAFE6_SPI_CS_Pin, GPIO_PIN_SET);
     return rx_data;
 }
 uint8_t ST1VAFE6AX_CheckSPI(void) {
