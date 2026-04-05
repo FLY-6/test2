@@ -47,6 +47,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
     application/ST1VAFE.c
     application/DS18B20.c
+    application/led_task.c
 )
 
 # Add include paths
