@@ -59,10 +59,12 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define ST1VAFE6_INT1_Pin GPIO_PIN_3
 #define ST1VAFE6_INT1_GPIO_Port GPIOA
+#define ST1VAFE6_INT1_EXTI_IRQn EXTI3_IRQn
 #define ST1VAFE6_SPI_CS_Pin GPIO_PIN_4
 #define ST1VAFE6_SPI_CS_GPIO_Port GPIOA
 #define ST1VAFE6_INT2_Pin GPIO_PIN_1
 #define ST1VAFE6_INT2_GPIO_Port GPIOB
+#define ST1VAFE6_INT2_EXTI_IRQn EXTI1_IRQn
 #define DQ_Pin GPIO_PIN_9
 #define DQ_GPIO_Port GPIOB
 
